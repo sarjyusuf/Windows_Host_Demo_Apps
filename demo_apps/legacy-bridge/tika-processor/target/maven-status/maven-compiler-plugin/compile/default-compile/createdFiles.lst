@@ -1,0 +1,4 @@
+com/legacybridge/tika/server/HealthHandler.class
+com/legacybridge/tika/TikaProcessorApp.class
+com/legacybridge/tika/server/ParseHandler.class
+com/legacybridge/tika/parser/DocumentParser.class

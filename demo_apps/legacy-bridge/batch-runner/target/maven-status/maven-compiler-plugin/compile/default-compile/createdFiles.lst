@@ -1,0 +1,5 @@
+com/legacybridge/batch/config/SchedulerConfig.class
+com/legacybridge/batch/jobs/ReindexJob.class
+com/legacybridge/batch/jobs/HealthCheckJob.class
+com/legacybridge/batch/jobs/CleanupJob.class
+com/legacybridge/batch/BatchRunnerApp.class

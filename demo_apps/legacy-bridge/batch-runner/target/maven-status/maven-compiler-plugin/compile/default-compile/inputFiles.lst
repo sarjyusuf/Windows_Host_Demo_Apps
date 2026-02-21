@@ -1,0 +1,5 @@
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/batch-runner/src/main/java/com/legacybridge/batch/BatchRunnerApp.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/batch-runner/src/main/java/com/legacybridge/batch/jobs/ReindexJob.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/batch-runner/src/main/java/com/legacybridge/batch/jobs/HealthCheckJob.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/batch-runner/src/main/java/com/legacybridge/batch/config/SchedulerConfig.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/batch-runner/src/main/java/com/legacybridge/batch/jobs/CleanupJob.java

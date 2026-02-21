@@ -1,0 +1,8 @@
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/config/RestApiApplication.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/service/JmsService.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/resource/SearchResource.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/resource/HealthResource.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/model/ApiResponse.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/service/DocumentStore.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/model/Document.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/rest-api/src/main/java/com/legacybridge/api/resource/DocumentResource.java

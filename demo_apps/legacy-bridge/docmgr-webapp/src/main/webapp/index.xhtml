@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template.xhtml">
+    <ui:define name="title">Documents - LegacyBridge</ui:define>
+
+    <ui:define name="content">
+        <h:form id="mainForm" enctype="multipart/form-data">
+
+            <!-- Growl for notifications -->
+            <p:growl id="growl" showDetail="true" life="3000" />
+
+            <p:panel header="Document Management" style="margin-bottom: 20px;">
+
+                <!-- Upload Section -->
+                <p:fieldset legend="Upload Document" toggleable="true" collapsed="false"
+                            style="margin-bottom: 15px;">
+                    <p:fileUpload listener="#{documentListBean.handleFileUpload}"
+                                  mode="advanced"
+                                  dragDropSupport="true"
+                                  multiple="true"
+                                  update="growl documentsTable"
+                                  sizeLimit="10485760"
+                                  allowTypes="/(\.|\/)(pdf|doc|docx|txt|xml|csv|xls|xlsx|png|jpg|jpeg)$/i"
+                                  label="Choose File"
+                                  uploadLabel="Upload"
+                                  cancelLabel="Cancel" />
+                </p:fieldset>
+
+                <!-- Quick Search -->
+                <p:fieldset legend="Quick Search" toggleable="true" collapsed="true"
+                            style="margin-bottom: 15px;">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="searchInput" value="Search:" />
+                        <p:inputText id="searchInput" value="#{documentListBean.searchQuery}"
+                                     placeholder="Enter search query..."
+                                     style="width: 300px;" />
+                        <p:commandButton value="Search" icon="pi pi-search"
+                                         action="#{documentListBean.quickSearch}"
+                                         update="documentsTable growl" />
+                    </h:panelGrid>
+                </p:fieldset>
+
+                <!-- Documents Table -->
+                <p:dataTable id="documentsTable"
+                             var="doc"
+                             value="#{documentListBean.documents}"
+                             paginator="true"
+                             rows="10"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,20,50"
+                             emptyMessage="No documents found."
+                             selectionMode="single"
+                             selection="#{documentListBean.selectedDocument}"
+                             rowKey="#{doc.id}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Documents Repository" />
+                        <p:commandButton icon="pi pi-refresh"
+                                         style="float: right;"
+                                         action="#{documentListBean.refresh}"
+                                         update="@form"
+                                         title="Refresh" />
+                    </f:facet>
+
+                    <p:column headerText="ID" sortBy="#{doc.id}" style="width: 80px;">
+                        <h:outputText value="#{doc.id}" />
+                    </p:column>
+
+                    <p:column headerText="Name" sortBy="#{doc.name}" filterBy="#{doc.name}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{doc.name}" />
+                    </p:column>
+
+                    <p:column headerText="Type" sortBy="#{doc.contentType}" style="width: 120px;">
+                        <h:outputText value="#{doc.contentType}" />
+                    </p:column>
+
+                    <p:column headerText="Size" sortBy="#{doc.size}" style="width: 100px;">
+                        <h:outputText value="#{doc.size}">
+                            <f:converter converterId="javax.faces.Long" />
+                        </h:outputText>
+                        <h:outputText value=" bytes" />
+                    </p:column>
+
+                    <p:column headerText="Upload Date" sortBy="#{doc.uploadDate}" style="width: 160px;">
+                        <h:outputText value="#{doc.uploadDate}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Status" sortBy="#{doc.status}" style="width: 100px;">
+                        <p:tag value="#{doc.status}"
+                               severity="#{doc.status eq 'PROCESSED' ? 'success' :
+                                          (doc.status eq 'PENDING' ? 'warning' : 'info')}" />
+                    </p:column>
+
+                    <p:column headerText="Actions" style="width: 100px; text-align: center;">
+                        <p:commandButton icon="pi pi-trash"
+                                         title="Delete"
+                                         styleClass="ui-button-danger"
+                                         action="#{documentListBean.deleteDocument(doc)}"
+                                         update="@form"
+                                         process="@this">
+                            <p:confirm header="Confirm Delete"
+                                       message="Are you sure you want to delete '#{doc.name}'?"
+                                       icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+
+            </p:panel>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button"
+                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button"
+                                 styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+            </p:confirmDialog>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

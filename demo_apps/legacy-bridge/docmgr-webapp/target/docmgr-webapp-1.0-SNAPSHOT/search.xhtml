@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template.xhtml">
+    <ui:define name="title">Search - LegacyBridge</ui:define>
+
+    <ui:define name="content">
+        <h:form id="searchForm">
+
+            <p:growl id="growl" showDetail="true" life="3000" />
+
+            <p:panel header="Document Search" style="margin-bottom: 20px;">
+
+                <p:fieldset legend="Search Documents">
+                    <h:panelGrid columns="3" cellpadding="5" style="margin-bottom: 15px;">
+                        <p:outputLabel for="queryInput" value="Search Query:" />
+                        <p:inputText id="queryInput" value="#{searchBean.query}"
+                                     placeholder="Enter keywords to search..."
+                                     style="width: 400px;"
+                                     required="true"
+                                     requiredMessage="Please enter a search query." />
+                        <p:commandButton value="Search" icon="pi pi-search"
+                                         action="#{searchBean.search}"
+                                         update="resultsTable growl"
+                                         validateClient="true" />
+                    </h:panelGrid>
+                </p:fieldset>
+
+                <!-- Search Results Table -->
+                <p:dataTable id="resultsTable"
+                             var="doc"
+                             value="#{searchBean.results}"
+                             paginator="true"
+                             rows="10"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             emptyMessage="No results found. Try a different search query."
+                             rendered="#{not empty searchBean.results or searchBean.searchPerformed}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Search Results"
+                                      rendered="#{not empty searchBean.results}" />
+                        <h:outputText value="Search Results (#{searchBean.results.size()} found)"
+                                      rendered="#{not empty searchBean.results}" />
+                    </f:facet>
+
+                    <p:column headerText="ID" style="width: 80px;">
+                        <h:outputText value="#{doc.id}" />
+                    </p:column>
+
+                    <p:column headerText="Name" sortBy="#{doc.name}">
+                        <h:outputText value="#{doc.name}" />
+                    </p:column>
+
+                    <p:column headerText="Type" style="width: 120px;">
+                        <h:outputText value="#{doc.contentType}" />
+                    </p:column>
+
+                    <p:column headerText="Size" style="width: 100px;">
+                        <h:outputText value="#{doc.size}" />
+                        <h:outputText value=" bytes" />
+                    </p:column>
+
+                    <p:column headerText="Status" style="width: 100px;">
+                        <p:tag value="#{doc.status}"
+                               severity="#{doc.status eq 'PROCESSED' ? 'success' :
+                                          (doc.status eq 'PENDING' ? 'warning' : 'info')}" />
+                    </p:column>
+
+                    <p:column headerText="Content Preview">
+                        <h:outputText value="#{doc.content}"
+                                      rendered="#{not empty doc.content}" />
+                    </p:column>
+
+                </p:dataTable>
+
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,5 @@
+com/legacybridge/processor/listener/DocumentMessageListener.class
+com/legacybridge/processor/service/ProcessingService.class
+com/legacybridge/processor/ProcessorApplication.class
+com/legacybridge/processor/config/JmsConfig.class
+com/legacybridge/processor/service/HealthController.class

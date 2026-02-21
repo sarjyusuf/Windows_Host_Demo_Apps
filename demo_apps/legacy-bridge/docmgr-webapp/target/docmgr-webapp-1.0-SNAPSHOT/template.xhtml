@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>
+        <ui:insert name="title">LegacyBridge Document Manager</ui:insert>
+    </title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        .header .subtitle {
+            font-size: 0.6em;
+            font-weight: normal;
+            color: #bdc3c7;
+            margin-left: 10px;
+        }
+        .content-area {
+            padding: 20px;
+            min-height: 500px;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: #bdc3c7;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.85em;
+            margin-top: 20px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <!-- Header -->
+    <div class="header">
+        LegacyBridge
+        <span class="subtitle">Enterprise Document Management System</span>
+    </div>
+
+    <!-- Menu Bar -->
+    <p:menubar>
+        <p:menuitem value="Documents" url="/index.xhtml" icon="pi pi-file" />
+        <p:menuitem value="Search" url="/search.xhtml" icon="pi pi-search" />
+        <p:submenu label="Admin" icon="pi pi-cog">
+            <p:menuitem value="Users" url="#" icon="pi pi-users" />
+            <p:menuitem value="Settings" url="#" icon="pi pi-sliders-h" />
+            <p:separator />
+            <p:menuitem value="System Health" url="#" icon="pi pi-heart" />
+        </p:submenu>
+    </p:menubar>
+
+    <!-- Main Content -->
+    <div class="content-area">
+        <ui:insert name="content">
+            <!-- Page content goes here -->
+        </ui:insert>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        LegacyBridge Document Management System v1.0 |
+        JSF 2.3 + PrimeFaces + CDI (Weld) |
+        Deployed on Apache Tomcat
+    </div>
+</h:body>
+</html>
