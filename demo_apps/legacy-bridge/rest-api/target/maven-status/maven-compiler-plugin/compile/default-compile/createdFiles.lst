@@ -1,0 +1,8 @@
+com/legacybridge/api/service/JmsService.class
+com/legacybridge/api/resource/DocumentResource.class
+com/legacybridge/api/config/RestApiApplication.class
+com/legacybridge/api/service/DocumentStore.class
+com/legacybridge/api/resource/SearchResource.class
+com/legacybridge/api/model/Document.class
+com/legacybridge/api/resource/HealthResource.class
+com/legacybridge/api/model/ApiResponse.class

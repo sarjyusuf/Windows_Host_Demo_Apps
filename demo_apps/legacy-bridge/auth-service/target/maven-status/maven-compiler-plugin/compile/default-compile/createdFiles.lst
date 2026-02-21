@@ -1,0 +1,3 @@
+com/legacybridge/auth/controller/TokenController.class
+com/legacybridge/auth/service/TokenService.class
+com/legacybridge/auth/controller/AuthController.class

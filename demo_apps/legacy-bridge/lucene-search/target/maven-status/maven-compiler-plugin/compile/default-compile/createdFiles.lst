@@ -1,0 +1,6 @@
+com/legacybridge/search/index/SearchResult.class
+com/legacybridge/search/server/IndexHandler.class
+com/legacybridge/search/index/IndexManager.class
+com/legacybridge/search/LuceneSearchApp.class
+com/legacybridge/search/server/SearchHandler.class
+com/legacybridge/search/server/HealthHandler.class

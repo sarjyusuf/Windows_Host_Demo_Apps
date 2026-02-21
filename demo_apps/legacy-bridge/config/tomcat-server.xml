@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LegacyBridge - Custom Tomcat Server Configuration
+
+  This configuration is copied to tomcat/conf/server.xml during setup.
+  It configures Tomcat for the LegacyBridge application with:
+  - HTTP connector on port 8080
+  - AJP connector disabled (not needed for this deployment)
+  - Access logging enabled
+  - Connection timeout of 20 seconds
+-->
+<Server port="8005" shutdown="SHUTDOWN">
+
+  <!-- Security listener to prevent certain insecure configurations -->
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <!-- Global JNDI resources -->
+  <GlobalNamingResources>
+    <Resource name="UserDatabase"
+              auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+
+    <!-- HTTP/1.1 Connector on port 8080 -->
+    <Connector port="8080"
+               protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+               maxThreads="200"
+               minSpareThreads="10"
+               acceptCount="100"
+               maxHttpHeaderSize="8192"
+               URIEncoding="UTF-8"
+               server="LegacyBridge" />
+
+    <!--
+      AJP Connector - DISABLED
+      Not needed for LegacyBridge deployment. Uncomment if you need
+      to put Apache HTTPD or nginx in front of Tomcat via AJP.
+    -->
+    <!--
+    <Connector protocol="AJP/1.3"
+               address="::1"
+               port="8009"
+               redirectPort="8443"
+               secretRequired="false" />
+    -->
+
+    <Engine name="Catalina" defaultHost="localhost">
+
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase" />
+      </Realm>
+
+      <Host name="localhost"
+            appBase="webapps"
+            unpackWARs="true"
+            autoDeploy="true">
+
+        <!-- Access Log Valve - logs all requests -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+               directory="logs"
+               prefix="localhost_access_log"
+               suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b %D"
+               rotatable="true"
+               fileDateFormat=".yyyy-MM-dd" />
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>

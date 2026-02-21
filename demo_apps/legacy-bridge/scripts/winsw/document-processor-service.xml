@@ -1,0 +1,15 @@
+<service>
+  <id>LegacyBridge-DocProcessor</id>
+  <name>LegacyBridge Document Processor</name>
+  <description>LegacyBridge Document Processor - Spring Boot + JMS listener that processes documents via ActiveMQ queue</description>
+  <executable>java</executable>
+  <arguments>-jar "%BASE%\..\..\document-processor\target\document-processor-1.0-SNAPSHOT.jar"</arguments>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>8</keepFiles>
+  </log>
+  <startmode>Automatic</startmode>
+  <delayedAutoStart>true</delayedAutoStart>
+  <stoptimeout>30 sec</stoptimeout>
+  <env name="SPRING_PROFILES_ACTIVE" value="production"/>
+</service>

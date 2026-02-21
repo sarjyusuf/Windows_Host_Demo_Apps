@@ -1,0 +1,5 @@
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/document-processor/src/main/java/com/legacybridge/processor/config/JmsConfig.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/document-processor/src/main/java/com/legacybridge/processor/listener/DocumentMessageListener.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/document-processor/src/main/java/com/legacybridge/processor/service/ProcessingService.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/document-processor/src/main/java/com/legacybridge/processor/ProcessorApplication.java
+/Users/syed.sarjeelyusuf/windowsInjction/demo_apps/legacy-bridge/document-processor/src/main/java/com/legacybridge/processor/service/HealthController.java
