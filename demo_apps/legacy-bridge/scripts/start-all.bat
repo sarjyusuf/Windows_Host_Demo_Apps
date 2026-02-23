@@ -27,6 +27,7 @@ REM ----------------------------------------------------------------------------
 REM 1. Start ActiveMQ
 REM ----------------------------------------------------------------------------
 echo [1/7] Starting ActiveMQ...
+set "DD_SERVICE=legacybridge-activemq"
 net start ActiveMQ >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo       [OK] ActiveMQ service started.
@@ -51,6 +52,7 @@ REM ----------------------------------------------------------------------------
 REM 2. Start Tomcat
 REM ----------------------------------------------------------------------------
 echo [2/7] Starting Tomcat (docmgr.war, auth.war, api.war)...
+set "DD_SERVICE=legacybridge-tomcat"
 net start LegacyBridge-Tomcat >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo       [OK] Tomcat service started.
@@ -75,6 +77,7 @@ REM ----------------------------------------------------------------------------
 REM 3. Start Tika Processor (standalone JAR - direct java.exe)
 REM ----------------------------------------------------------------------------
 echo [3/7] Starting Tika Processor (port 8081)...
+set "DD_SERVICE=legacybridge-tika"
 set "TIKA_JAR=%PROJECT_ROOT%\tika-processor\target\tika-processor-1.0-SNAPSHOT.jar"
 if exist "%TIKA_JAR%" (
     start "Tika Processor" java -jar "%TIKA_JAR%"
@@ -91,6 +94,7 @@ REM ----------------------------------------------------------------------------
 REM 4. Start Lucene Search (standalone JAR - direct java.exe)
 REM ----------------------------------------------------------------------------
 echo [4/7] Starting Lucene Search (port 8082)...
+set "DD_SERVICE=legacybridge-lucene"
 set "LUCENE_JAR=%PROJECT_ROOT%\lucene-search\target\lucene-search-1.0-SNAPSHOT.jar"
 if exist "%LUCENE_JAR%" (
     start "Lucene Search" java -jar "%LUCENE_JAR%"
@@ -107,6 +111,7 @@ REM ----------------------------------------------------------------------------
 REM 5. Start Document Processor (Windows service via WinSW)
 REM ----------------------------------------------------------------------------
 echo [5/7] Starting Document Processor (port 8083)...
+set "DD_SERVICE=legacybridge-doc-processor"
 net start LegacyBridge-DocProcessor >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo       [OK] Document Processor service started.
@@ -129,6 +134,7 @@ REM ----------------------------------------------------------------------------
 REM 6. Start Batch Runner (Windows service via WinSW)
 REM ----------------------------------------------------------------------------
 echo [6/7] Starting Batch Runner...
+set "DD_SERVICE=legacybridge-batch-runner"
 net start LegacyBridge-BatchRunner >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo       [OK] Batch Runner service started.
@@ -151,6 +157,7 @@ REM ----------------------------------------------------------------------------
 REM 7. Start Swing Client (standalone JAR - direct java.exe, GUI)
 REM ----------------------------------------------------------------------------
 echo [7/7] Starting Swing Desktop Client...
+set "DD_SERVICE=legacybridge-swing-client"
 set "SWING_JAR=%PROJECT_ROOT%\swing-client\target\swing-client-1.0-SNAPSHOT.jar"
 if exist "%SWING_JAR%" (
     start "SwingClient" java -jar "%SWING_JAR%"
