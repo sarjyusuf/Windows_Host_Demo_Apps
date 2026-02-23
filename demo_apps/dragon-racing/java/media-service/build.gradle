@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version "${shadowVersion}"
+}
+
+application {
+    mainClass = 'com.dragonracing.media.MediaServiceApplication'
+}
+
+dependencies {
+    implementation "org.eclipse.jetty:jetty-server:${jettyVersion}"
+    implementation "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+    implementation "org.eclipse.jetty:jetty-util:${jettyVersion}"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+}
+
+shadowJar {
+    archiveBaseName = 'media-service'
+    archiveVersion = project.version
+    archiveClassifier = 'all'
+    mergeServiceFiles()
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+}
+
+build.dependsOn shadowJar

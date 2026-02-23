@@ -1,0 +1,12 @@
+micronaut:
+  application:
+    name: leaderboard
+  server:
+    port: 9082
+
+dragon-stable:
+  url: http://localhost:9080
+
+logging:
+  level:
+    com.dragonracing: DEBUG

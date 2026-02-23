@@ -1,0 +1,7 @@
+rootProject.name = 'dragon-racing-league'
+
+include 'dragon-stable'
+include 'race-schedule'
+include 'leaderboard'
+include 'media-service'
+include 'sync-scheduler'

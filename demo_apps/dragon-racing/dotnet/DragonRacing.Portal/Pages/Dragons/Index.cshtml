@@ -1,0 +1,76 @@
+@page
+@model DragonRacing.Portal.Pages.Dragons.IndexModel
+@{
+    ViewData["Title"] = "Dragons";
+}
+
+<div class="page-header">
+    <h1>&#x1F409; Dragon Stable &#x1F409;</h1>
+    <p>Meet the legendary dragons competing in the Dragon Racing League</p>
+</div>
+
+<table class="dragon-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Dragon</th>
+            <th>Breed</th>
+            <th>Level</th>
+            <th>Speed</th>
+            <th>Stamina</th>
+            <th>Agility</th>
+            <th>Rating</th>
+            <th>Record</th>
+            <th>Owner</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dragon in Model.Dragons.OrderByDescending(d => d.OverallRating))
+        {
+            <tr>
+                <td style="color: var(--text-muted);">@dragon.Id</td>
+                <td>
+                    <strong style="color: var(--fire-orange);">&#x1F432; @dragon.Name</strong>
+                </td>
+                <td style="color: var(--text-secondary);">@dragon.Breed</td>
+                <td>
+                    <span class="level-badge">Lv.@dragon.Level</span>
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 2rem;">@dragon.Speed</span>
+                        <div class="stat-bar" style="width: 80px;">
+                            <div class="stat-bar-fill speed" style="width: @dragon.Speed%"></div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 2rem;">@dragon.Stamina</span>
+                        <div class="stat-bar" style="width: 80px;">
+                            <div class="stat-bar-fill stamina" style="width: @dragon.Stamina%"></div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 2rem;">@dragon.Agility</span>
+                        <div class="stat-bar" style="width: 80px;">
+                            <div class="stat-bar-fill agility" style="width: @dragon.Agility%"></div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="badge badge-gold">@dragon.OverallRating.ToString("F1")</span>
+                </td>
+                <td>
+                    <span class="record">
+                        <span class="wins">@dragon.Wins W</span> /
+                        <span class="losses">@dragon.Losses L</span>
+                    </span>
+                </td>
+                <td style="color: var(--text-secondary);">@dragon.OwnerName</td>
+            </tr>
+        }
+    </tbody>
+</table>

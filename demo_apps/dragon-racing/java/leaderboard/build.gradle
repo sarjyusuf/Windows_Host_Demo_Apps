@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version "${shadowVersion}"
+    id 'io.micronaut.application' version '4.2.1'
+}
+
+application {
+    mainClass = 'com.dragonracing.leaderboard.LeaderboardApplication'
+}
+
+micronaut {
+    runtime("netty")
+    processing {
+        incremental(true)
+        annotations("com.dragonracing.leaderboard.*")
+    }
+}
+
+dependencies {
+    annotationProcessor "io.micronaut:micronaut-http-validation"
+    annotationProcessor "io.micronaut.serde:micronaut-serde-processor"
+
+    implementation "io.micronaut:micronaut-http-server-netty"
+    implementation "io.micronaut.serde:micronaut-serde-jackson"
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "io.micronaut:micronaut-jackson-databind"
+
+    runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
+}
+
+shadowJar {
+    archiveBaseName = 'leaderboard'
+    archiveVersion = project.version
+    archiveClassifier = 'all'
+    mergeServiceFiles()
+}
+
+build.dependsOn shadowJar

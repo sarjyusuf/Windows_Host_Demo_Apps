@@ -1,0 +1,40 @@
+// Dragon Racing League - Root Build Configuration
+// ================================================
+// A multi-module Gradle project for the greatest dragon racing league
+// the world has ever seen!
+
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group = 'com.dragonracing'
+    version = project.property('projectVersion')
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+
+    dependencies {
+        // Common logging
+        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+        implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
+        // Common Jackson
+        implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+        implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    }
+}

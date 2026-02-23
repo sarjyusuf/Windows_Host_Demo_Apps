@@ -1,0 +1,137 @@
+@page
+@model DragonRacing.Portal.Pages.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header">
+    <h1>&#x1F525; Dragon Racing League &#x1F525;</h1>
+    <p>Welcome to the ultimate dragon racing and betting experience!</p>
+</div>
+
+<!-- Stats Overview -->
+<div class="grid-4">
+    <div class="card stat-card">
+        <div class="stat-number">@Model.Dragons.Count</div>
+        <div class="stat-label">&#x1F409; Racing Dragons</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number">@Model.UpcomingRaces.Count</div>
+        <div class="stat-label">&#x1F3C1; Upcoming Races</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number">@Model.CompletedRaces.Count</div>
+        <div class="stat-label">&#x2705; Completed Races</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number">@Model.Dragons.Sum(d => d.Wins)</div>
+        <div class="stat-label">&#x1F3C6; Total Victories</div>
+    </div>
+</div>
+
+<!-- Upcoming Races -->
+<h2 class="section-title"><span>&#x1F3C1;</span> Upcoming Races</h2>
+<div class="grid-3">
+    @foreach (var race in Model.UpcomingRaces)
+    {
+        <div class="card">
+            <div class="card-title">&#x1F3CE;&#xFE0F; @race.TrackName</div>
+            <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                <strong>Race #@race.Id</strong> &mdash;
+                <span class="badge badge-scheduled">@race.Status</span>
+            </p>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                &#x1F552; @race.StartTime.ToString("MMM dd, yyyy HH:mm") UTC
+            </p>
+            <p style="margin-bottom: 0.5rem; color: var(--text-secondary);">
+                <strong>@race.Entries.Count dragons entered:</strong>
+            </p>
+            @foreach (var entry in race.Entries)
+            {
+                <p style="margin-left: 1rem; color: var(--text-primary);">
+                    &#x1F432; @entry.DragonName
+                    <span class="odds" style="margin-left: 0.5rem;">@entry.Odds.ToString("F1")x</span>
+                </p>
+            }
+            <div style="margin-top: 1rem;">
+                <a href="/Bet" class="btn btn-gold">&#x1F4B0; Place a Bet</a>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.UpcomingRaces.Count == 0)
+{
+    <div class="alert alert-info">&#x1F4E2; No upcoming races scheduled. Check back soon!</div>
+}
+
+<!-- Top Dragons -->
+<h2 class="section-title"><span>&#x1F409;</span> Top Dragons</h2>
+<div class="grid-4">
+    @{ var topDragons = Model.Dragons.OrderByDescending(d => d.Wins).Take(4).ToList(); }
+    @for (int i = 0; i < topDragons.Count; i++)
+    {
+        var dragon = topDragons[i];
+        var posClass = i == 0 ? "position-1" : i == 1 ? "position-2" : i == 2 ? "position-3" : "";
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span class="card-title @posClass" style="margin-bottom: 0;">
+                    @(i == 0 ? "&#x1F947;" : i == 1 ? "&#x1F948;" : i == 2 ? "&#x1F949;" : "&#x1F432;") @dragon.Name
+                </span>
+                <span class="level-badge">Lv.@dragon.Level</span>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 0.8rem;">@dragon.Breed</p>
+            <p class="record">
+                <span class="wins">@dragon.Wins W</span> / <span class="losses">@dragon.Losses L</span>
+            </p>
+            <div style="margin-top: 0.8rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                    <span>Speed</span><span>@dragon.Speed</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill speed" style="width: @dragon.Speed%"></div></div>
+            </div>
+            <div style="margin-top: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                    <span>Stamina</span><span>@dragon.Stamina</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill stamina" style="width: @dragon.Stamina%"></div></div>
+            </div>
+            <div style="margin-top: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                    <span>Agility</span><span>@dragon.Agility</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill agility" style="width: @dragon.Agility%"></div></div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Recent Results -->
+<h2 class="section-title"><span>&#x1F3C6;</span> Recent Results</h2>
+@if (Model.CompletedRaces.Count > 0)
+{
+    <div class="grid-2">
+        @foreach (var race in Model.CompletedRaces.Take(4))
+        {
+            <div class="card">
+                <div class="card-title">&#x1F3C1; @race.TrackName</div>
+                <span class="badge badge-completed">Completed</span>
+                <div style="margin-top: 1rem;">
+                    @foreach (var result in race.Results.OrderBy(r => r.Position))
+                    {
+                        var posClass = result.Position == 1 ? "position-1" : result.Position == 2 ? "position-2" : result.Position == 3 ? "position-3" : "";
+                        <p class="@posClass" style="margin-bottom: 0.3rem;">
+                            @(result.Position == 1 ? "&#x1F947;" : result.Position == 2 ? "&#x1F948;" : result.Position == 3 ? "&#x1F949;" : "#" + result.Position)
+                            @result.DragonName
+                            <span style="color: var(--text-muted); margin-left: 0.5rem;">@result.FinishTime.ToString("F2")s</span>
+                        </p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">&#x1F4E2; No race results yet. The first race is coming soon!</div>
+}
