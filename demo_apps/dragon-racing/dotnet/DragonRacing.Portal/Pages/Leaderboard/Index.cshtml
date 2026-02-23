@@ -1,0 +1,107 @@
+@page
+@model DragonRacing.Portal.Pages.Leaderboard.IndexModel
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+
+<div class="page-header">
+    <h1>&#x1F3C6; Leaderboard &#x1F3C6;</h1>
+    <p>The greatest dragon champions of the realm</p>
+</div>
+
+<!-- Top 3 Podium -->
+@if (Model.Dragons.Count >= 3)
+{
+    var top3 = Model.Dragons.Take(3).ToList();
+    <div class="grid-3" style="margin-bottom: 3rem;">
+        <!-- Second Place -->
+        <div class="card" style="text-align: center; margin-top: 2rem;">
+            <div style="font-size: 3rem;">&#x1F948;</div>
+            <div class="card-title position-2" style="font-size: 1.5rem;">@top3[1].Name</div>
+            <p style="color: var(--text-secondary);">@top3[1].Breed</p>
+            <div class="level-badge" style="margin: 0.5rem auto; display: inline-flex;">Lv.@top3[1].Level</div>
+            <div style="margin-top: 1rem;">
+                <span class="record"><span class="wins">@top3[1].Wins W</span> / <span class="losses">@top3[1].Losses L</span></span>
+            </div>
+            <div style="margin-top: 0.5rem; font-size: 1.2rem; color: var(--silver);">
+                Rating: @top3[1].OverallRating.ToString("F1")
+            </div>
+        </div>
+
+        <!-- First Place -->
+        <div class="card" style="text-align: center; border-color: var(--gold); box-shadow: 0 0 30px rgba(255, 215, 0, 0.15);">
+            <div style="font-size: 4rem;">&#x1F947;</div>
+            <div class="card-title position-1" style="font-size: 1.8rem;">@top3[0].Name</div>
+            <p style="color: var(--text-secondary);">@top3[0].Breed</p>
+            <div class="level-badge" style="margin: 0.5rem auto; display: inline-flex;">Lv.@top3[0].Level</div>
+            <div style="margin-top: 1rem;">
+                <span class="record"><span class="wins">@top3[0].Wins W</span> / <span class="losses">@top3[0].Losses L</span></span>
+            </div>
+            <div style="margin-top: 0.5rem; font-size: 1.4rem; color: var(--gold);">
+                Rating: @top3[0].OverallRating.ToString("F1")
+            </div>
+        </div>
+
+        <!-- Third Place -->
+        <div class="card" style="text-align: center; margin-top: 3rem;">
+            <div style="font-size: 2.5rem;">&#x1F949;</div>
+            <div class="card-title position-3" style="font-size: 1.3rem;">@top3[2].Name</div>
+            <p style="color: var(--text-secondary);">@top3[2].Breed</p>
+            <div class="level-badge" style="margin: 0.5rem auto; display: inline-flex;">Lv.@top3[2].Level</div>
+            <div style="margin-top: 1rem;">
+                <span class="record"><span class="wins">@top3[2].Wins W</span> / <span class="losses">@top3[2].Losses L</span></span>
+            </div>
+            <div style="margin-top: 0.5rem; font-size: 1.1rem; color: var(--bronze);">
+                Rating: @top3[2].OverallRating.ToString("F1")
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Full Rankings Table -->
+<h2 class="section-title"><span>&#x1F4CA;</span> Full Rankings</h2>
+<table class="dragon-table">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Dragon</th>
+            <th>Breed</th>
+            <th>Level</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Win Rate</th>
+            <th>Rating</th>
+            <th>Owner</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int rank = 1; }
+        @foreach (var dragon in Model.Dragons)
+        {
+            var totalRaces = dragon.Wins + dragon.Losses;
+            var winRate = totalRaces > 0 ? (double)dragon.Wins / totalRaces * 100 : 0;
+            var posClass = rank == 1 ? "position-1" : rank == 2 ? "position-2" : rank == 3 ? "position-3" : "";
+            <tr>
+                <td class="@posClass" style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem;">
+                    @(rank == 1 ? "&#x1F947;" : rank == 2 ? "&#x1F948;" : rank == 3 ? "&#x1F949;" : "#" + rank)
+                </td>
+                <td><strong style="color: var(--fire-orange);">&#x1F432; @dragon.Name</strong></td>
+                <td style="color: var(--text-secondary);">@dragon.Breed</td>
+                <td><span class="level-badge">Lv.@dragon.Level</span></td>
+                <td style="color: var(--success-green); font-weight: 600;">@dragon.Wins</td>
+                <td style="color: var(--danger-red);">@dragon.Losses</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="stat-bar" style="width: 60px;">
+                            <div class="stat-bar-fill speed" style="width: @winRate%"></div>
+                        </div>
+                        <span style="color: var(--text-secondary);">@winRate.ToString("F0")%</span>
+                    </div>
+                </td>
+                <td><span class="badge badge-gold">@dragon.OverallRating.ToString("F1")</span></td>
+                <td style="color: var(--text-secondary);">@dragon.OwnerName</td>
+            </tr>
+            rank++;
+        }
+    </tbody>
+</table>

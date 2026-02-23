@@ -1,0 +1,171 @@
+@page
+@model DragonRacing.Portal.Pages.Bet.IndexModel
+@{
+    ViewData["Title"] = "Place Bet";
+}
+
+<div class="page-header">
+    <h1>&#x1F4B0; Place Your Bet &#x1F4B0;</h1>
+    <p>Wager your gold on the dragon you believe will claim victory!</p>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">&#x2705; @Model.SuccessMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">&#x274C; @Model.ErrorMessage</div>
+}
+
+<div class="grid-2">
+    <!-- Bet Form -->
+    <div class="card">
+        <div class="card-title">&#x1F3B2; New Bet</div>
+        <form method="post">
+            <div class="form-group">
+                <label for="BettorName">&#x1F464; Your Name</label>
+                <input type="text" id="BettorName" name="BettorName" class="form-control"
+                       placeholder="Enter your name, brave bettor..." required value="@Model.BettorName" />
+            </div>
+
+            <div class="form-group">
+                <label for="RaceId">&#x1F3C1; Select Race</label>
+                <select id="RaceId" name="RaceId" class="form-control" required>
+                    <option value="">-- Choose a Race --</option>
+                    @foreach (var race in Model.AvailableRaces)
+                    {
+                        <option value="@race.Id" selected="@(Model.SelectedRaceId == race.Id)">
+                            Race #@race.Id - @race.TrackName (@race.StartTime.ToString("MMM dd HH:mm") UTC)
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="DragonId">&#x1F432; Select Dragon</label>
+                <select id="DragonId" name="DragonId" class="form-control" required>
+                    <option value="">-- Choose a Dragon --</option>
+                    @foreach (var dragon in Model.AvailableDragons)
+                    {
+                        <option value="@dragon.Id">
+                            @dragon.Name (@dragon.Breed) - Rating: @dragon.OverallRating.ToString("F1")
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Amount">&#x1F4B0; Bet Amount (Gold)</label>
+                <input type="number" id="Amount" name="Amount" class="form-control"
+                       placeholder="How much gold do you dare to wager?" min="1" max="10000" required value="@Model.Amount" />
+            </div>
+
+            <button type="submit" class="btn btn-fire" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                &#x1F525; Place Bet &#x1F525;
+            </button>
+        </form>
+    </div>
+
+    <!-- Current Odds & Race Info -->
+    <div>
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-title">&#x1F4CA; Current Odds</div>
+            @if (Model.AvailableRaces.Count > 0)
+            {
+                @foreach (var race in Model.AvailableRaces)
+                {
+                    <div style="margin-bottom: 1.5rem;">
+                        <p style="color: var(--fire-orange); font-weight: 600; margin-bottom: 0.5rem;">
+                            &#x1F3CE;&#xFE0F; @race.TrackName (Race #@race.Id)
+                        </p>
+                        @foreach (var entry in race.Entries)
+                        {
+                            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.5rem; border-bottom: 1px solid rgba(42, 42, 74, 0.3);">
+                                <span>&#x1F432; @entry.DragonName</span>
+                                <span class="odds">@entry.Odds.ToString("F1")x</span>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="color: var(--text-muted);">No races available for betting.</p>
+            }
+        </div>
+
+        <div class="card">
+            <div class="card-title">&#x1F4D6; Betting Rules</div>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(42, 42, 74, 0.3);">
+                    &#x1F4B0; Minimum bet: <strong>1 gold</strong>
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(42, 42, 74, 0.3);">
+                    &#x1F4B0; Maximum bet: <strong>10,000 gold</strong>
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(42, 42, 74, 0.3);">
+                    &#x1F3C6; Payout = Bet Amount x Odds
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(42, 42, 74, 0.3);">
+                    &#x1F525; Higher odds = higher risk, higher reward!
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    &#x26A0;&#xFE0F; Bets are final once placed. Choose wisely!
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Bets -->
+<h2 class="section-title" style="margin-top: 3rem;"><span>&#x1F4DC;</span> Recent Bets</h2>
+@if (Model.RecentBets.Count > 0)
+{
+    <table class="dragon-table">
+        <thead>
+            <tr>
+                <th>Bet #</th>
+                <th>Bettor</th>
+                <th>Race</th>
+                <th>Dragon</th>
+                <th>Amount</th>
+                <th>Odds</th>
+                <th>Potential Payout</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var bet in Model.RecentBets.OrderByDescending(b => b.Id).Take(20))
+            {
+                var statusClass = bet.Status switch
+                {
+                    "Won" => "badge-completed",
+                    "PaidOut" => "badge-gold",
+                    "Lost" => "",
+                    _ => "badge-scheduled"
+                };
+                <tr>
+                    <td style="color: var(--text-muted);">#@bet.Id</td>
+                    <td>@bet.BettorName</td>
+                    <td>Race #@bet.RaceId</td>
+                    <td style="color: var(--fire-orange);">&#x1F432; Dragon #@bet.DragonId</td>
+                    <td style="color: var(--gold);">@bet.Amount.ToString("N0") gold</td>
+                    <td class="odds">@bet.Odds.ToString("F1")x</td>
+                    <td style="color: var(--fire-yellow);">@((bet.Amount * bet.Odds).ToString("N0")) gold</td>
+                    <td>
+                        <span class="badge @statusClass"
+                              style="@(bet.Status == "Lost" ? "background: rgba(244, 67, 54, 0.2); color: var(--danger-red); border: 1px solid rgba(244, 67, 54, 0.3);" : "")">
+                            @bet.Status
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">&#x1F4E2; No bets placed yet. Be the first to wager!</div>
+}

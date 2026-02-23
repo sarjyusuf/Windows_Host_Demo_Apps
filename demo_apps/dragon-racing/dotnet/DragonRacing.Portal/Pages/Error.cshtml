@@ -1,0 +1,24 @@
+@page
+@model DragonRacing.Portal.Pages.ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="page-header">
+    <h1>&#x1F525; A Dragon Ate Your Page &#x1F525;</h1>
+    <p>Something went terribly wrong in the Dragon Racing League!</p>
+</div>
+
+<div class="card" style="text-align: center; padding: 3rem;">
+    <div style="font-size: 5rem; margin-bottom: 1rem;">&#x1F409;&#x1F4A8;</div>
+    <p style="color: var(--text-secondary); font-size: 1.2rem;">
+        An unexpected error occurred. The dragons are investigating...
+    </p>
+    @if (Model.ShowRequestId)
+    {
+        <p style="color: var(--text-muted); margin-top: 1rem;">
+            <strong>Request ID:</strong> <code style="color: var(--fire-orange);">@Model.RequestId</code>
+        </p>
+    }
+    <a href="/" class="btn btn-fire" style="margin-top: 2rem;">Return to the Arena</a>
+</div>

@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version "${shadowVersion}"
+}
+
+application {
+    mainClass = 'com.dragonracing.sync.SyncSchedulerApplication'
+}
+
+dependencies {
+    implementation "org.quartz-scheduler:quartz:${quartzVersion}"
+    implementation "org.apache.httpcomponents.client5:httpclient5:${httpClientVersion}"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+}
+
+shadowJar {
+    archiveBaseName = 'sync-scheduler'
+    archiveVersion = project.version
+    archiveClassifier = 'all'
+    mergeServiceFiles()
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+}
+
+build.dependsOn shadowJar

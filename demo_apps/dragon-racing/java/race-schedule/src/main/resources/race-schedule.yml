@@ -1,0 +1,22 @@
+# Dragon Racing League - Race Schedule Service Configuration
+# Dropwizard 4.0
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 9081
+  adminConnectors:
+    - type: http
+      port: 9181
+
+logging:
+  level: INFO
+  loggers:
+    com.dragonracing: DEBUG
+  appenders:
+    - type: console
+      logFormat: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Custom app config
+databasePath: "C:\\dragon-racing\\data\\races.db"
+queueDir: "C:\\dragon-racing\\queues\\races\\pending"

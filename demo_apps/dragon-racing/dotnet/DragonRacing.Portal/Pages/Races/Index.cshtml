@@ -1,0 +1,81 @@
+@page
+@model DragonRacing.Portal.Pages.Races.IndexModel
+@{
+    ViewData["Title"] = "Races";
+}
+
+<div class="page-header">
+    <h1>&#x1F3C1; Race Schedule &#x1F3C1;</h1>
+    <p>Track all upcoming and completed dragon races</p>
+</div>
+
+<!-- Upcoming Races -->
+<h2 class="section-title"><span>&#x1F552;</span> Upcoming Races</h2>
+@{ var upcoming = Model.Races.Where(r => r.Status == "Scheduled" || r.Status == "InProgress").ToList(); }
+@if (upcoming.Count > 0)
+{
+    <div class="grid-3">
+        @foreach (var race in upcoming)
+        {
+            var badgeClass = race.Status == "InProgress" ? "badge-inprogress" : "badge-scheduled";
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span class="card-title" style="margin-bottom: 0;">&#x1F3CE;&#xFE0F; @race.TrackName</span>
+                    <span class="badge @badgeClass">@race.Status</span>
+                </div>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                    Race #@race.Id &mdash; &#x1F552; @race.StartTime.ToString("MMM dd, yyyy HH:mm") UTC
+                </p>
+                <p style="color: var(--fire-orange); font-weight: 600; margin-bottom: 0.5rem;">Entries:</p>
+                @foreach (var entry in race.Entries)
+                {
+                    <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(42, 42, 74, 0.3);">
+                        <span>&#x1F432; @entry.DragonName</span>
+                        <span class="odds">@entry.Odds.ToString("F1")x</span>
+                    </div>
+                }
+                <div style="margin-top: 1rem;">
+                    <a href="/Bet" class="btn btn-fire">&#x1F4B0; Bet on this Race</a>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">&#x1F4E2; No upcoming races. Stay tuned for more!</div>
+}
+
+<!-- Completed Races -->
+<h2 class="section-title" style="margin-top: 3rem;"><span>&#x2705;</span> Completed Races</h2>
+@{ var completed = Model.Races.Where(r => r.Status == "Completed").ToList(); }
+@if (completed.Count > 0)
+{
+    <div class="grid-2">
+        @foreach (var race in completed.OrderByDescending(r => r.Id))
+        {
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span class="card-title" style="margin-bottom: 0;">&#x1F3C1; @race.TrackName</span>
+                    <span class="badge badge-completed">Completed</span>
+                </div>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Race #@race.Id</p>
+                @foreach (var result in race.Results.OrderBy(r => r.Position))
+                {
+                    var posClass = result.Position == 1 ? "position-1" : result.Position == 2 ? "position-2" : result.Position == 3 ? "position-3" : "";
+                    <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(42, 42, 74, 0.3);">
+                        <span class="@posClass">
+                            @(result.Position == 1 ? "&#x1F947;" : result.Position == 2 ? "&#x1F948;" : result.Position == 3 ? "&#x1F949;" : "#" + result.Position)
+                            @result.DragonName
+                        </span>
+                        <span style="color: var(--text-muted);">@result.FinishTime.ToString("F2")s</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">&#x1F4E2; No completed races yet. Races will appear here once finished.</div>
+}

@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version "${shadowVersion}"
+}
+
+application {
+    mainClass = 'com.dragonracing.schedule.RaceScheduleApplication'
+}
+
+dependencies {
+    implementation "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+    implementation "io.dropwizard:dropwizard-jdbi3:${dropwizardVersion}"
+    implementation "org.xerial:sqlite-jdbc:${sqliteVersion}"
+}
+
+shadowJar {
+    archiveBaseName = 'race-schedule'
+    archiveVersion = project.version
+    archiveClassifier = 'all'
+    mergeServiceFiles()
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+}
+
+// Ensure shadow JAR is built with build task
+build.dependsOn shadowJar
